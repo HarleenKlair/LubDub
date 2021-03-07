@@ -1,0 +1,88 @@
+import matplotlib.pyplot as plt 
+import numpy as np 
+def data_graph(bp_s, bp_d): 
+ x = [] 
+ for i in range(len(bp_s)): 
+ x.append(i+1) 
+ ##Creation of the BP graph 
+ x_ticks=np.arange(0,len(x)+1,1) 
+ plt.xticks(x_ticks) 
+ plt.plot(x,bp_s, label = 'Systolic') 
+ plt.plot(x,bp_d, label = 'Diastolic') 
+ plt.xlabel('Days Tracked') 
+ plt.ylabel('Blood Pressure (mmHg)')  plt.title('Change in Blood Pressure')  plt.legend() 
+ plt.show() 
+ sum_s=0 
+ sum_d=0 
+  
+ ##Calculation of current week's average systole  if ((len(x)>=7) and len(x)%7 == 0): 
+ i = 7 
+ while i!=0: 
+ sum_s = sum_s + bp_s[-i] 
+ sum_d = sum_d + bp_d[-i]
+ i = i - 1 
+ avg_s = round(sum_s/7) 
+ avg_d = round(sum_d/7) 
+ print("Your average blood pressure for this week is: \t", avg_s,"/", avg_d) 
+ sum_s_prev = 0 
+ sum_d_prev = 0  
+ ##Calculation of previous week's average systole 
+ if((len(x)>=14) and len(x)%7 == 0): 
+ i = 14 
+ while i!=7: 
+ sum_s_prev = sum_s_prev + bp_s[-i] 
+ sum_d_prev = sum_d_prev + bp_s[-i] 
+ i = i - 1 
+ avg_s_prev = round(sum_s_prev/7) 
+ avg_d_prev = round(sum_d_prev/7) 
+ ##Calculation and display of percent change in systolic BP from previous week to current  percent_change_s = round(100*((avg_s-avg_s_prev)/avg_s_prev),1) 
+ if (percent_change_s >0): 
+ print("This is a ",percent_change_s,"% increase in systolic blood pressure from the previous  week.\n") 
+ elif (percent_change_s <0): 
+ print("This is a ",-1*percent_change_s,"% decrease in systolic blood pressure from the previous  week.\n")
+ else: 
+ print("Your systolic blood pressure stayed the same as last week.\n") 
+def advice(systole, diastole): 
+ ##analyze blood pressure and state evaluation 
+ PP = systole - diastole 
+ if PP > 50: 
+ print("Evaluation: \t seek medical help\n") 
+ elif systole <= 40: 
+ print("Evaluation: \t seek medical attention\n") 
+ elif systole <= 90: 
+ print("Evaluation: \t low blood pressure\n") 
+ elif systole <= 120: 
+ print("Evaluation: \t normal blood pressure\n") 
+ elif systole <= 140: 
+ print("Evaluation: \t prehypertension\n") 
+ elif systole <= 160: 
+ print("Evaluation: \t stage 1 hypertension\n") 
+ elif systole <= 180: 
+ print("Evaluation: \t stage 2 hyper tension\n") 
+ else: 
+ print("Evaluation: \t hypertensive crisis, seek medical attention\n") def data_collection(systole_list, diastole_list):
+ ##Inputing the BP from the patient. In completed software, would be done by scanning BP monitor  with phone camera 
+ systole, diastole = (input("Enter blood pressure (systole/diastole):").split('/'))   
+ systole = int(systole) 
+ diastole = int(diastole) 
+  
+ systole_list.append(systole) 
+ diastole_list.append(diastole) 
+ return systole, diastole, systole_list, diastole_list 
+  
+  
+  
+def main(): 
+ ##Sample values imputted for demo purposes 
+ systole_list=[] 
+ diastole_list=[] 
+ Continue = 'Y' 
+  
+ while(Continue == 'Y' or Continue == 'y'): 
+ systole, diastole, systole_list, diastole_list = data_collection(systole_list, diastole_list)
+ advice(systole,diastole) 
+  
+ view = input("Would you like to veiw your blood pressure trend? (y/n):")  if (view == 'Y' or view == 'y'): 
+ data_graph(systole_list,diastole_list) 
+ Continue = input("Would you like to input another reading?(y/n):")   
+main()
